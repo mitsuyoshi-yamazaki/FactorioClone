@@ -147,9 +147,32 @@ Factorioを参考モデルとして選定した理由：
    - クラフトメニュー
    - 設備設定画面
 
-### 6.4 実装技術の決定
-以下は要件確定後に検討・決定する：
-- プログラミング言語・フレームワーク
+### 6.4 確定した実装技術
+
+**技術スタック**:
+- **言語**: TypeScript
+- **ゲーム描画**: PIXI.js（WebGL/Canvas）
+- **UI描画**: HTML/CSS
+- **ビルドツール**: Vite
+- **アーキテクチャ**: ハイブリッド構成（ゲーム要素とUI要素の分離）
+
+**構成概要**:
+```html
+<div id="gameContainer">
+  <canvas id="gameCanvas"></canvas> <!-- PIXI.js -->
+  <div id="uiOverlay">              <!-- HTML/CSS -->
+    <div id="inventory">...</div>
+    <div id="craftingMenu">...</div>
+  </div>
+</div>
+```
+
+**選定理由**:
+- PIXI.js: WebGL活用による高性能な2D描画、将来の拡張性
+- HTML/CSS: UI実装の効率性、レスポンシブ対応
+- TypeScript: 型安全性による開発効率向上
+
+### 6.5 今後検討する技術要素
 - アーキテクチャ設計（ECS vs OOP等）
 - パフォーマンス最適化手法
 - データ永続化方式
