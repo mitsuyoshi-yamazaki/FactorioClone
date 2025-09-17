@@ -172,8 +172,43 @@ Factorioを参考モデルとして選定した理由：
 - HTML/CSS: UI実装の効率性、レスポンシブ対応
 - TypeScript: 型安全性による開発効率向上
 
-### 6.5 今後検討する技術要素
-- アーキテクチャ設計（ECS vs OOP等）
+### 6.5 確定したアーキテクチャ設計
+
+**採用アーキテクチャ**: ECS + State + Observer を核とした構成
+
+**アーキテクチャ構成**:
+```typescript
+interface GameArchitecture {
+  world: World;                    // ECS World
+  systems: System[];               // ECS Systems
+  stateManager: StateManager;      // State Pattern
+  eventBus: EventBus;             // Observer Pattern
+  entityFactories: Map<string, EntityFactory>; // Factory Pattern
+}
+```
+
+**採用デザインパターン**:
+- **Entity Component System (ECS)**: ゲームオブジェクトの柔軟な組み合わせ
+  - Entity: プレイヤー、ベルト、インサータ、組立機、資源ノード
+  - Component: Position, Renderable, Inventory, Recipe, PowerConsumer, ItemTransporter
+  - System: MovementSystem, RenderSystem, CraftingSystem, PowerSystem, TransportSystem
+
+- **State Pattern**: 複雑な機械の状態管理
+  - 組立機の状態: Idle, Crafting, Blocked, NoPower
+  - インサータの状態: Waiting, Grabbing, Moving, Inserting
+  - ゲーム状態: Playing, Paused, Menu, Inventory
+
+- **Observer Pattern**: システム間の疎結合な通信
+  - 電力グリッドの供給/需要変動通知
+  - インベントリ変更のUI更新通知
+  - アイテム生産の統計更新通知
+
+**段階的導入方針**:
+1. **Phase 1**: Observer PatternでEventBus実装
+2. **Phase 2**: ECS導入とState Pattern適用
+3. **Phase 3**: 全パターン統合と最適化
+
+### 6.6 今後検討する技術要素
 - パフォーマンス最適化手法
 - データ永続化方式
 
