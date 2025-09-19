@@ -149,64 +149,23 @@ Factorioを参考モデルとして選定した理由：
 
 ### 6.4 確定した実装技術
 
-**技術スタック**:
+実装に使用する技術スタック、フレームワーク構成、アーキテクチャの詳細は `docs/architecture.md` を参照してください。
+
+**概要**:
 - **言語**: TypeScript
 - **ゲーム描画**: PIXI.js（WebGL/Canvas）
 - **UI描画**: HTML/CSS
 - **ビルドツール**: Vite
-- **アーキテクチャ**: ハイブリッド構成（ゲーム要素とUI要素の分離）
-
-**構成概要**:
-```html
-<div id="gameContainer">
-  <canvas id="gameCanvas"></canvas> <!-- PIXI.js -->
-  <div id="uiOverlay">              <!-- HTML/CSS -->
-    <div id="inventory">...</div>
-    <div id="craftingMenu">...</div>
-  </div>
-</div>
-```
-
-**選定理由**:
-- PIXI.js: WebGL活用による高性能な2D描画、将来の拡張性
-- HTML/CSS: UI実装の効率性、レスポンシブ対応
-- TypeScript: 型安全性による開発効率向上
+- **テスト**: Jest（ユニット） + Playwright（E2E）
 
 ### 6.5 確定したアーキテクチャ設計
 
-**採用アーキテクチャ**: ECS + State + Observer を核とした構成
+アーキテクチャ設計、デザインパターンの詳細、実装構造については `docs/architecture.md` を参照してください。
 
-**アーキテクチャ構成**:
-```typescript
-interface GameArchitecture {
-  world: World;                    // ECS World
-  systems: System[];               // ECS Systems
-  stateManager: StateManager;      // State Pattern
-  eventBus: EventBus;             // Observer Pattern
-  entityFactories: Map<string, EntityFactory>; // Factory Pattern
-}
-```
-
-**採用デザインパターン**:
+**採用アーキテクチャ概要**: ECS + State + Observer を核とした構成
 - **Entity Component System (ECS)**: ゲームオブジェクトの柔軟な組み合わせ
-  - Entity: プレイヤー、ベルト、インサータ、組立機、資源ノード
-  - Component: Position, Renderable, Inventory, Recipe, PowerConsumer, ItemTransporter
-  - System: MovementSystem, RenderSystem, CraftingSystem, PowerSystem, TransportSystem
-
 - **State Pattern**: 複雑な機械の状態管理
-  - 組立機の状態: Idle, Crafting, Blocked, NoPower
-  - インサータの状態: Waiting, Grabbing, Moving, Inserting
-  - ゲーム状態: Playing, Paused, Menu, Inventory
-
 - **Observer Pattern**: システム間の疎結合な通信
-  - 電力グリッドの供給/需要変動通知
-  - インベントリ変更のUI更新通知
-  - アイテム生産の統計更新通知
-
-**段階的導入方針**:
-1. **Phase 1**: Observer PatternでEventBus実装
-2. **Phase 2**: ECS導入とState Pattern適用
-3. **Phase 3**: 全パターン統合と最適化
 
 ### 6.6 今後検討する技術要素
 - パフォーマンス最適化手法

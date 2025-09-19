@@ -8,7 +8,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト状態
 
-現在、プロジェクトは初期段階にあり、コードベースはまだ作成されていません。Gitリポジトリは初期化されていますが、プロジェクトファイルは存在しません。
+プロジェクトの基本構造が構築済みです：
+- TypeScript + PIXI.js + Viteによる開発環境
+- Jest（ユニット）+ Playwright（E2E）のテスト環境
+- 基本Gameクラスとデバッグ API実装
+- ECS + State + Observer パターンによるアーキテクチャ設計
+
+詳細は `docs/architecture.md` を参照してください。
 
 ## 開発指針
 
@@ -28,6 +34,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
       - 内容：そのコミットを生み出したユーザープロンプト（指示）を記載
     - 「<コミットハッシュ>のコミットノートを作成」メッセージでコミット
 
-## 今後の開発方針
+## 次のステップ
 
-プロジェクト構造、技術スタック、ビルドシステムなどは今後定義される予定です。現在は空のリポジトリであるため、基本的なプロジェクト構造から構築する必要があります。
+ECSアーキテクチャの実装とゲームシステム（ベルトコンベア、インサーター、組立機等）の開発を進める段階です。
+
+詳細な要件は `docs/requirements.md`、アーキテクチャ詳細は `docs/architecture.md` を参照してください。
