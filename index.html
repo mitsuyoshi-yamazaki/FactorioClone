@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factorio Clone</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      overflow: hidden;
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #gameCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      cursor: crosshair;
+    }
+
+    #uiOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .ui-panel {
+      pointer-events: auto;
+      background-color: rgba(44, 62, 80, 0.9);
+      border: 2px solid #34495e;
+      border-radius: 4px;
+      padding: 10px;
+    }
+
+    #inventory {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 400px;
+      height: 100px;
+    }
+
+    #debug-panel {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 250px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .debug-visible #debug-panel {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas"></canvas>
+    <div id="uiOverlay">
+      <div id="inventory" class="ui-panel">
+        <div>インベントリ</div>
+        <div id="inventory-items"></div>
+      </div>
+      <div id="debug-panel" class="ui-panel">
+        <div><strong>Debug Info</strong></div>
+        <div id="debug-info"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
