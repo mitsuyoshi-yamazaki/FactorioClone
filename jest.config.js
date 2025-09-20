@@ -5,27 +5,29 @@ export default {
   testEnvironment: 'jsdom',
   rootDir: '.',
   testMatch: [
-    '<rootDir>/src/**/*.(test|spec).ts',
+    '<rootDir>/lib/**/*.(test|spec).ts',
+    '<rootDir>/app/**/*.(test|spec).(ts|tsx)',
     '<rootDir>/tests/unit/**/*.(test|spec).ts',
     '<rootDir>/tests/integration/**/*.(test|spec).ts'
   ],
   moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/components/(.*)$': '<rootDir>/src/components/$1',
-    '^@/systems/(.*)$': '<rootDir>/src/systems/$1',
-    '^@/entities/(.*)$': '<rootDir>/src/entities/$1',
-    '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@/types/(.*)$': '<rootDir>/src/types/$1',
-    '^@/debug/(.*)$': '<rootDir>/src/debug/$1',
+    '^@/(.*)$': '<rootDir>/$1',
+    '^@/lib/(.*)$': '<rootDir>/lib/$1',
+    '^@/app/(.*)$': '<rootDir>/app/$1',
+    '^@/components/(.*)$': '<rootDir>/app/components/$1',
+    '^@/game/(.*)$': '<rootDir>/lib/game/$1',
+    '^@/utils/(.*)$': '<rootDir>/lib/utils/$1',
     '^@/test-utils/(.*)$': '<rootDir>/test-utils/$1'
   },
   setupFilesAfterEnv: [
     '<rootDir>/test-utils/jest-setup.ts'
   ],
   collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-    '!src/main.ts'
+    'lib/**/*.ts',
+    'app/**/*.{ts,tsx}',
+    '!lib/**/*.d.ts',
+    '!app/**/*.d.ts',
+    '!**/*.stories.{ts,tsx}'
   ],
   coverageDirectory: 'coverage',
   coverageReporters: [

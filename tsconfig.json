@@ -1,59 +1,75 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    // Next.js基本設定
+    "target": "ES2020",
+    "lib": ["dom", "dom.iterable", "ES2020"],
+    "allowJs": true,
     "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-
-    /* Bundler mode */
+    "module": "esnext",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "jsx": "preserve",
+    "incremental": true,
 
-    /* Linting */
-    "strict": true,
+    // 型チェック強化（static-code-analysis.md準拠）
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+
+    // 未使用コード検出
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "exactOptionalPropertyTypes": true,
 
-    /* Path mapping */
+    // より厳密な型チェック
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+
+    // 到達不能コード検出
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+
+    // パスマッピング
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/systems/*": ["src/systems/*"],
-      "@/entities/*": ["src/entities/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/types/*": ["src/types/*"],
-      "@/debug/*": ["src/debug/*"],
-      "@/test-utils/*": ["test-utils/*"]
+      "@/*": ["./*"],
+      "@/app/*": ["./app/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/components/*": ["./app/components/*"],
+      "@/game/*": ["./lib/game/*"],
+      "@/utils/*": ["./lib/utils/*"],
+      "@/test-utils/*": ["./test-utils/*"]
     },
 
-    /* Output settings */
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-
-    /* Experimental */
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    // Next.js固有設定
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "src/**/*",
-    "test-utils/**/*",
-    "tests/**/*",
-    "vite.config.ts"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
+    ".next",
     "dist",
-    "playwright-report",
-    "test-results"
+    "coverage"
   ]
 }

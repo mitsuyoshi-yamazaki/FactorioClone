@@ -152,10 +152,11 @@ Factorioを参考モデルとして選定した理由：
 実装に使用する技術スタック、フレームワーク構成、アーキテクチャの詳細は `docs/architecture.md` を参照してください。
 
 **概要**:
+- **フレームワーク**: NextJS 14 (App Router)
+- **UIライブラリ**: React 18
 - **言語**: TypeScript
 - **ゲーム描画**: PIXI.js（WebGL/Canvas）
-- **UI描画**: HTML/CSS
-- **ビルドツール**: Vite
+- **パッケージ管理**: yarn
 - **テスト**: Jest（ユニット） + Playwright（E2E）
 
 ### 6.5 確定したアーキテクチャ設計

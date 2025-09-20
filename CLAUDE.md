@@ -9,10 +9,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## プロジェクト状態
 
 プロジェクトの基本構造が構築済みです：
-- TypeScript + PIXI.js + Viteによる開発環境
+- NextJS 14 (App Router) + TypeScript + PIXI.js + Reactによる開発環境
 - Jest（ユニット）+ Playwright（E2E）のテスト環境
 - 基本Gameクラスとデバッグ API実装
 - ECS + State + Observer パターンによるアーキテクチャ設計
+- ハイブリッド描画（PIXI.js Canvas + React UI）の実装
 
 詳細は `docs/architecture.md` を参照してください。
 

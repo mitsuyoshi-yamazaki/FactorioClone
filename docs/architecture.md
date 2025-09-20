@@ -5,26 +5,35 @@
 ### 1.1 プロジェクト構成
 ```
 FactorioClone/
-├── src/                          # メインソースコード
-│   ├── Game.ts                   # コアゲームクラス
-│   ├── main.ts                   # エントリーポイント
-│   ├── ecs/                      # ECSアーキテクチャ
-│   │   ├── World.ts              # ECSワールド管理
-│   │   ├── components/           # コンポーネント定義
-│   │   ├── systems/              # システム実装
-│   │   └── entities/             # エンティティファクトリ
-│   ├── state/                    # 状態管理
-│   │   ├── StateManager.ts       # State Pattern実装
-│   │   └── states/               # 各種ゲーム状態
-│   ├── events/                   # イベントシステム
-│   │   └── EventBus.ts           # Observer Pattern実装
-│   ├── ui/                       # HTML/CSS UI
-│   │   ├── components/           # UIコンポーネント
-│   │   └── styles/               # CSSスタイル
+├── app/                          # NextJS App Router
+│   ├── layout.tsx                # ルートレイアウト
+│   ├── page.tsx                  # メインゲームページ
+│   ├── globals.css               # グローバルスタイル
+│   └── components/               # Reactコンポーネント
+│       ├── Game/                 # ゲーム関連コンポーネント
+│       │   ├── GameContainer.tsx # ゲーム全体管理
+│       │   ├── GameCanvas.tsx    # PIXI.js統合
+│       │   └── DebugPanel.tsx    # デバッグUI
+│       └── UI/                   # ゲームUI
+│           ├── HUD.tsx           # ゲーム情報表示
+│           └── Inventory.tsx     # インベントリUI
+├── lib/                          # ゲームロジック
+│   ├── game/                     # ゲームコア
+│   │   ├── Game.ts               # メインゲームクラス
+│   │   ├── ecs/                  # ECSアーキテクチャ
+│   │   │   ├── World.ts          # ECSワールド管理
+│   │   │   ├── components/       # コンポーネント定義
+│   │   │   ├── systems/          # システム実装
+│   │   │   └── entities/         # エンティティファクトリ
+│   │   ├── state/                # 状態管理
+│   │   │   ├── StateManager.ts   # State Pattern実装
+│   │   │   └── states/           # 各種ゲーム状態
+│   │   └── events/               # イベントシステム
+│   │       └── EventBus.ts       # Observer Pattern実装
 │   └── utils/                    # ユーティリティ
 ├── tests/                        # テストコード
-│   ├── unit/                     # ユニットテスト
-│   └── e2e/                      # E2Eテスト
+│   ├── e2e/                      # E2Eテスト
+│   └── integration/              # 統合テスト
 ├── test-utils/                   # テストユーティリティ
 └── docs/                         # ドキュメント
 ```
@@ -32,18 +41,25 @@ FactorioClone/
 ### 1.2 アーキテクチャ概要
 ```typescript
 interface ApplicationArchitecture {
+  // NextJS App Router レイヤー
+  app: {
+    layout: RootLayout;              // ルートレイアウト（HTML構造）
+    pages: GamePage[];               // ゲームページ
+    components: ReactComponent[];    // Reactコンポーネント
+  };
+
   // 描画レイヤー分離
-  gameRenderer: PIXI.Application;   // ゲーム要素描画（PIXI.js）
-  uiLayer: HTMLElement;             // UI要素描画（HTML/CSS）
+  gameRenderer: PIXI.Application;    // ゲーム要素描画（PIXI.js）
+  uiLayer: React.ReactNode;         // UI要素描画（React）
 
   // ゲームアーキテクチャ
-  world: World;                     // ECS World
-  systems: System[];                // ECS Systems
-  stateManager: StateManager;       // State Pattern
-  eventBus: EventBus;              // Observer Pattern
+  world: World;                      // ECS World
+  systems: System[];                 // ECS Systems
+  stateManager: StateManager;        // State Pattern
+  eventBus: EventBus;               // Observer Pattern
 
   // デバッグ・テスト
-  debugAPI: DebugAPI;              // AIエージェント用デバッグインターフェース
+  debugAPI: DebugAPI;               // AIエージェント用デバッグインターフェース
 }
 ```
 
@@ -150,32 +166,54 @@ class EventBus {
 
 | 技術 | 役割 | 使用目的 |
 |------|------|----------|
+| **NextJS 14** | フレームワーク | App Router、SSR、最適化、ルーティング |
+| **React 18** | UIライブラリ | コンポーネントベースUI、状態管理 |
 | **TypeScript** | プログラミング言語 | 型安全性、開発効率、バグ削減 |
 | **PIXI.js** | ゲーム描画エンジン | WebGL/Canvas高性能2D描画、アニメーション |
-| **HTML/CSS** | UI描画 | インベントリ、メニュー等のUI要素 |
-| **Vite** | ビルドツール | 高速開発サーバー、効率的なビルド |
 | **Jest** | ユニットテスト | 単体テスト、ロジックテスト |
 | **Playwright** | E2Eテスト | ブラウザ統合テスト、UIテスト |
 
 ### 3.2 描画レイヤー分離
 
-```html
-<!-- アプリケーション構造 -->
-<div id="gameContainer">
-  <canvas id="gameCanvas"></canvas>  <!-- PIXI.js: ゲーム要素 -->
-  <div id="uiOverlay">               <!-- HTML/CSS: UI要素 -->
-    <div id="inventory">...</div>
-    <div id="craftingMenu">...</div>
-    <div id="debug-panel">...</div>
-  </div>
-</div>
+```tsx
+// NextJS App Router構造
+export default function GamePage() {
+  return (
+    <main className="game-container">
+      <GameContainer>
+        {/* PIXI.js ゲームキャンバス */}
+        <GameCanvas onGameReady={handleGameReady} />
+
+        {/* React UI オーバーレイ */}
+        <div className="ui-overlay">
+          <HUD game={game} />
+          <Inventory game={game} />
+          <DebugPanel game={game} />
+        </div>
+      </GameContainer>
+    </main>
+  )
+}
 ```
 
 **分離方針**:
 - **PIXI.js**: プレイヤー、設備、アイテム、エフェクト等のゲーム要素
-- **HTML/CSS**: インベントリ、メニュー、HUD、デバッグパネル等のUI要素
+- **React**: インベントリ、メニュー、HUD、デバッグパネル等のUI要素
+- **NextJS**: ページルーティング、SSR、最適化
 
 ### 3.3 各フレームワークの責務
+
+#### NextJS 14 (フレームワーク)
+- App Routerによるファイルベースルーティング
+- サーバーサイドレンダリング（必要に応じて）
+- 自動コード分割と最適化
+- 開発サーバーとホットリロード
+
+#### React 18 (UIライブラリ)
+- コンポーネントベースのUI構築
+- ゲーム状態とUIの同期
+- イベントハンドリング
+- useStateによるローカル状態管理
 
 #### PIXI.js (ゲーム描画)
 - ゲームワールドの描画（60FPS）
@@ -183,22 +221,25 @@ class EventBus {
 - アニメーション（ベルト移動、機械動作）
 - カメラシステム（ズーム、パン）
 
-#### HTML/CSS (UI描画)
-- 静的UI要素（メニュー、インベントリ）
-- フォーム要素（設定画面）
-- レスポンシブデザイン
-- アクセシビリティ対応
-
 ## 4. テスト設計方針
 
 ### 4.1 テスト構成
 ```
-tests/
-├── unit/                    # ユニットテスト（Jest）
+lib/                         # ユニットテスト（同ディレクトリ配置）
+├── game/
 │   ├── Game.test.ts         # Gameクラステスト
 │   ├── ecs/                 # ECS要素のテスト
 │   ├── state/               # State Patternテスト
 │   └── utils/               # ユーティリティテスト
+app/                         # Reactコンポーネントテスト
+├── components/
+│   ├── Game/
+│   │   ├── GameCanvas.test.tsx      # GameCanvasテスト
+│   │   └── DebugPanel.test.tsx      # DebugPanelテスト
+│   └── UI/
+│       ├── HUD.test.tsx             # HUDテスト
+│       └── Inventory.test.tsx       # Inventoryテスト
+tests/
 ├── e2e/                     # E2Eテスト（Playwright）
 │   ├── basic-functionality.spec.ts  # 基本機能テスト
 │   ├── debug-api.spec.ts             # デバッグAPIテスト
@@ -211,23 +252,35 @@ tests/
 
 #### ユニットテスト（Jest）
 ```typescript
-// モッキング方針
+// PIXI.jsモッキング方針
 jest.mock('pixi.js', () => ({
   Application: jest.fn().mockImplementation(() => ({
     init: jest.fn().mockResolvedValue(undefined),
     canvas: document.createElement('canvas'),
-    renderer: { resize: jest.fn() }
+    renderer: { resize: jest.fn() },
+    destroy: jest.fn()
   }))
 }));
 
-// テスト構造
-describe('ComponentName', () => {
+// Reactコンポーネントテスト
+import { render, screen } from '@testing-library/react'
+import { GameCanvas } from './GameCanvas'
+
+describe('GameCanvas', () => {
+  test('正常に初期化されること', () => {
+    render(<GameCanvas />)
+    expect(screen.getByText('ゲーム初期化中...')).toBeInTheDocument()
+  })
+})
+
+// ゲームロジックテスト
+describe('Game', () => {
   describe('機能グループ', () => {
-    it('具体的な動作説明', () => {
+    test('具体的な動作説明', () => {
       // テスト実装
-    });
-  });
-});
+    })
+  })
+})
 ```
 
 #### E2Eテスト（Playwright）
@@ -274,17 +327,17 @@ interface DebugAPI {
 ### 5.1 開発環境セットアップ
 ```bash
 # 依存関係のインストール
-npm install
+yarn install
 
 # 開発サーバー起動（ホットリロード有効）
-npm run dev
-# -> http://localhost:5173 でアクセス
+yarn dev
+# -> http://localhost:3000 でアクセス
 
 # プロダクションビルド
-npm run build
+yarn build
 
-# プレビューサーバー（ビルド後）
-npm run preview
+# プロダクションサーバー起動
+yarn start
 ```
 
 ### 5.2 テスト実行
@@ -292,28 +345,28 @@ npm run preview
 #### ユニットテスト
 ```bash
 # 全ユニットテスト実行
-npm test
+yarn test
 
 # 監視モード（開発時）
-npm run test:watch
+yarn test --watch
 
 # カバレッジ付き実行
-npm run test:coverage
+yarn test --coverage
 ```
 
 #### E2Eテスト
 ```bash
 # 開発サーバー起動が必要
-npm run dev &
+yarn dev &
 
 # E2Eテスト実行
-npm run test:e2e
+yarn test:e2e
 
 # ヘッドフルモード（UIあり）
-npm run test:e2e:headed
+yarn test:e2e --headed
 
 # デバッグモード
-npm run test:e2e:debug
+yarn test:e2e --debug
 ```
 
 ### 5.3 デバッグ環境

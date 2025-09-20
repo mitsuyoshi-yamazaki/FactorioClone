@@ -1,50 +1,50 @@
-import { Application } from 'pixi.js';
+import { Application } from "pixi.js"
 
 /**
  * デバッグAPI型定義
  */
 type DebugAPI = {
-  getState: () => GameState;
-  executeAction: (action: string, params: Record<string, unknown>) => DebugActionResult;
-  getEntities: () => Record<string, unknown>;
-  getSystems: () => Record<string, unknown>;
-};
+  getState: () => GameState
+  executeAction: (action: string, params: Record<string, unknown>) => DebugActionResult
+  getEntities: () => Record<string, unknown>
+  getSystems: () => Record<string, unknown>
+}
 
 /**
  * ゲーム状態型定義
  */
 type GameState = {
-  initialized: boolean;
-  timestamp: number;
-  entities: Record<string, unknown>;
-  systems: Record<string, unknown>;
+  initialized: boolean
+  timestamp: number
+  entities: Record<string, unknown>
+  systems: Record<string, unknown>
   player: {
-    x: number;
-    y: number;
-    inventory: Record<string, unknown>;
-  };
-};
+    x: number
+    y: number
+    inventory: Record<string, unknown>
+  }
+}
 
 /**
  * デバッグアクション結果型定義
  */
 type DebugActionResult = {
-  pong?: boolean;
-  timestamp?: number;
-  error?: string;
-};
+  pong?: boolean
+  timestamp?: number
+  error?: string
+}
 
 /**
  * メインゲームクラス
  * ECS + State + Observer アーキテクチャの統合点
  */
 export class Game {
-  private readonly _app: Application;
-  private _initialized = false;
-  private _gameLoop?: number;
+  private readonly _app: Application
+  private _initialized = false
+  private _gameLoop?: number
 
   constructor(app: Application) {
-    this._app = app;
+    this._app = app
   }
 
   /**
@@ -52,10 +52,10 @@ export class Game {
    */
   initialize = async (): Promise<void> => {
     if (this._initialized) {
-      return;
+      return
     }
 
-    console.log('🚀 Initializing Factorio Clone...');
+    console.log("🚀 Initializing Factorio Clone...")
 
     // TODO: ECS World の初期化
     // TODO: Systems の初期化
@@ -63,41 +63,41 @@ export class Game {
     // TODO: StateManager の初期化
 
     // 仮の初期化ログ
-    console.log('✅ Game initialized successfully');
+    console.log("✅ Game initialized successfully")
 
-    this._initialized = true;
-  };
+    this._initialized = true
+  }
 
   /**
    * ゲームループ開始
    */
   start = (): void => {
     if (!this._initialized) {
-      throw new Error('Game must be initialized before starting');
+      throw new Error("Game must be initialized before starting")
     }
 
-    console.log('🎮 Starting game loop...');
+    console.log("🎮 Starting game loop...")
 
     // ゲームループ
     const gameLoop = (deltaTime: number): void => {
-      this._update(deltaTime);
-      this._render();
-      this._gameLoop = requestAnimationFrame(gameLoop);
-    };
+      this._update(deltaTime)
+      this._render()
+      this._gameLoop = requestAnimationFrame(gameLoop)
+    }
 
-    this._gameLoop = requestAnimationFrame(gameLoop);
-  };
+    this._gameLoop = requestAnimationFrame(gameLoop)
+  }
 
   /**
    * ゲームループ停止
    */
   stop = (): void => {
     if (this._gameLoop != null) {
-      cancelAnimationFrame(this._gameLoop);
-      this._gameLoop = undefined;
+      cancelAnimationFrame(this._gameLoop)
+      this._gameLoop = undefined
     }
-    console.log('⏹️ Game loop stopped');
-  };
+    console.log("⏹️ Game loop stopped")
+  }
 
   /**
    * 更新処理
@@ -105,7 +105,7 @@ export class Game {
   private _update = (deltaTime: number): void => {
     // TODO: Systems の update 処理
     // TODO: StateManager の update 処理
-  };
+  }
 
   /**
    * 描画処理
@@ -113,15 +113,15 @@ export class Game {
   private _render = (): void => {
     // PIXI.js が自動的にレンダリング
     // TODO: UI の更新処理
-  };
+  }
 
   /**
    * リサイズ処理
    */
   handleResize = (width: number, height: number): void => {
-    // TODO: カメラやUIの調整
-    console.log(`🔄 Resized to ${width}x${height}`);
-  };
+    this._app.renderer.resize(width, height)
+    console.log(`🔄 Resized to ${width}x${height}`)
+  }
 
   /**
    * デバッグAPI取得
@@ -129,11 +129,12 @@ export class Game {
   getDebugAPI = (): DebugAPI => {
     return {
       getState: () => this._getGameState(),
-      executeAction: (action: string, params: Record<string, unknown>) => this._executeDebugAction(action, params),
+      executeAction: (action: string, params: Record<string, unknown>) =>
+        this._executeDebugAction(action, params),
       getEntities: () => ({}), // TODO: 実装
       getSystems: () => ({}), // TODO: 実装
-    };
-  };
+    }
+  }
 
   /**
    * ゲーム状態取得（デバッグ用）
@@ -150,23 +151,25 @@ export class Game {
         y: 0,
         inventory: {},
       },
-    };
-  };
+    }
+  }
 
   /**
    * デバッグアクション実行
    */
-  private _executeDebugAction = (action: string, params: Record<string, unknown>): DebugActionResult => {
-    console.log(`🔧 Debug action: ${action}`, params);
+  private _executeDebugAction = (
+    action: string,
+    params: Record<string, unknown>
+  ): DebugActionResult => {
+    console.log(`🔧 Debug action: ${action}`, params)
 
     switch (action) {
-      case 'ping':
-        return { pong: true, timestamp: Date.now() };
+      case "ping":
+        return { pong: true, timestamp: Date.now() }
 
       default:
-        console.warn(`Unknown debug action: ${action}`);
-        return { error: `Unknown action: ${action}` };
+        console.warn(`Unknown debug action: ${action}`)
+        return { error: `Unknown action: ${action}` }
     }
-  };
-}
+  }
 }
