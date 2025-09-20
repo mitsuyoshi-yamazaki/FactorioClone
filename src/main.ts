@@ -3,7 +3,7 @@ import { Game } from './Game';
 
 declare global {
   interface Window {
-    __debug?: any;
+    __debug?: ReturnType<Game['getDebugAPI']>;
     game?: Game;
   }
 }
@@ -11,7 +11,7 @@ declare global {
 /**
  * メインエントリーポイント
  */
-async function main() {
+const main = async (): Promise<void> => {
   try {
     // PIXI.js アプリケーションの初期化
     const app = new Application();
@@ -69,7 +69,7 @@ async function main() {
     `;
     document.body.appendChild(errorDiv);
   }
-}
+};
 
 // DOM読み込み完了後にゲーム開始
 if (document.readyState === 'loading') {

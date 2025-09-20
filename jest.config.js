@@ -5,6 +5,7 @@ export default {
   testEnvironment: 'jsdom',
   rootDir: '.',
   testMatch: [
+    '<rootDir>/src/**/*.(test|spec).ts',
     '<rootDir>/tests/unit/**/*.(test|spec).ts',
     '<rootDir>/tests/integration/**/*.(test|spec).ts'
   ],
@@ -43,9 +44,6 @@ export default {
     }]
   },
   // Canvas/WebGL関連のモック
-  moduleNameMapping: {
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
-  },
   setupFiles: [
     '<rootDir>/test-utils/jest-canvas-mock.ts'
   ]

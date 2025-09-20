@@ -2,7 +2,7 @@
  * Game クラスのユニットテスト
  */
 import { Application } from 'pixi.js';
-import { Game } from '@/Game';
+import { Game } from './Game';
 
 // PIXI.js のモック
 jest.mock('pixi.js', () => ({
@@ -25,14 +25,14 @@ describe('Game', () => {
   });
 
   describe('初期化', () => {
-    it('正常に初期化できること', async () => {
+    test('正常に初期化できること', async () => {
       await game.initialize();
 
       // 初期化後は再度初期化しても問題ないこと
       await expect(game.initialize()).resolves.not.toThrow();
     });
 
-    it('初期化前にstart()を呼ぶとエラーが発生すること', () => {
+    test('初期化前にstart()を呼ぶとエラーが発生すること', () => {
       expect(() => game.start()).toThrow('Game must be initialized before starting');
     });
   });
@@ -42,7 +42,7 @@ describe('Game', () => {
       await game.initialize();
     });
 
-    it('start()でゲームループが開始されること', () => {
+    test('start()でゲームループが開始されること', () => {
       const requestAnimationFrameSpy = jest.spyOn(window, 'requestAnimationFrame');
 
       game.start();
@@ -50,7 +50,7 @@ describe('Game', () => {
       expect(requestAnimationFrameSpy).toHaveBeenCalled();
     });
 
-    it('stop()でゲームループが停止されること', () => {
+    test('stop()でゲームループが停止されること', () => {
       const cancelAnimationFrameSpy = jest.spyOn(window, 'cancelAnimationFrame');
 
       game.start();
@@ -65,7 +65,7 @@ describe('Game', () => {
       await game.initialize();
     });
 
-    it('デバッグAPIが正しく返されること', () => {
+    test('デバッグAPIが正しく返されること', () => {
       const debugAPI = game.getDebugAPI();
 
       expect(debugAPI).toHaveProperty('getState');
@@ -74,7 +74,7 @@ describe('Game', () => {
       expect(debugAPI).toHaveProperty('getSystems');
     });
 
-    it('getState()でゲーム状態が取得できること', () => {
+    test('getState()でゲーム状態が取得できること', () => {
       const debugAPI = game.getDebugAPI();
       const state = debugAPI.getState();
 
@@ -85,7 +85,7 @@ describe('Game', () => {
       expect(state).toHaveProperty('player');
     });
 
-    it('executeAction()でpingアクションが実行できること', () => {
+    test('executeAction()でpingアクションが実行できること', () => {
       const debugAPI = game.getDebugAPI();
       const result = debugAPI.executeAction('ping', {});
 
@@ -95,7 +95,7 @@ describe('Game', () => {
       });
     });
 
-    it('executeAction()で不明なアクションはエラーが返されること', () => {
+    test('executeAction()で不明なアクションはエラーが返されること', () => {
       const debugAPI = game.getDebugAPI();
       const result = debugAPI.executeAction('unknown', {});
 
@@ -110,7 +110,7 @@ describe('Game', () => {
       await game.initialize();
     });
 
-    it('handleResize()が正常に実行されること', () => {
+    test('handleResize()が正常に実行されること', () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
 
       game.handleResize(1024, 768);
