@@ -102,7 +102,7 @@ test.describe('デバッグAPI', () => {
       try {
         return window.__debug.executeAction(null, {});
       } catch (error) {
-        return { error: error.message };
+        return { error: (error as Error).message };
       }
     });
 
@@ -114,7 +114,7 @@ test.describe('デバッグAPI', () => {
       try {
         return window.__debug.executeAction(undefined, {});
       } catch (error) {
-        return { error: error.message };
+        return { error: (error as Error).message };
       }
     });
 

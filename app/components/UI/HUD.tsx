@@ -7,7 +7,7 @@ type HUDProps = {
   game: Game
 }
 
-export const HUD = ({ game }: HUDProps): JSX.Element => {
+export const HUD = ({ game: _game }: HUDProps): JSX.Element => {
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {

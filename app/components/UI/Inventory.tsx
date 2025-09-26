@@ -6,7 +6,7 @@ type InventoryProps = {
   game: Game
 }
 
-export const Inventory = ({ game }: InventoryProps): JSX.Element => {
+export const Inventory = ({ game: _game }: InventoryProps): JSX.Element => {
   // TODO: 実際のインベントリデータをゲームから取得
   const inventorySlots = Array.from({ length: 20 }, (_, i) => ({
     id: i,

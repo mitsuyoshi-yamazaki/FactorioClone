@@ -31,7 +31,7 @@ class TestSystem extends System {
     return this._requiredComponents
   }
 
-  update(world: World, deltaTime: number): void {
+  update(_world: World, _deltaTime: number): void {
     // テスト用の空実装
   }
 }

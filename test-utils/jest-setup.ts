@@ -39,7 +39,7 @@ HTMLCanvasElement.prototype.getContext = jest.fn(() => ({
 }));
 
 // WebGL のモック
-HTMLCanvasElement.prototype.getContext = jest.fn((contextType) => {
+(HTMLCanvasElement.prototype.getContext as any) = jest.fn((contextType: string) => {
   if (contextType === 'webgl' || contextType === 'webgl2') {
     return {
       createShader: jest.fn(),
@@ -88,7 +88,7 @@ global.performance = global.performance || {
 const originalConsoleLog = console.log;
 console.log = jest.fn((...args) => {
   // テスト中は重要なメッセージのみ表示
-  if (args[0]?.toString().includes('🧪') || process.env.VERBOSE_TESTS) {
+  if (args[0]?.toString().includes('🧪') || process.env['VERBOSE_TESTS']) {
     originalConsoleLog(...args);
   }
 });

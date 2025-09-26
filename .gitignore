@@ -1,2 +1,4 @@
 .env
+tsconfig.tsbuildinfo
 .claude/
+node_modules/

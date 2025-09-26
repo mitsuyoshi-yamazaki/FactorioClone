@@ -45,10 +45,8 @@ export const GameCanvas = ({ onGameReady }: GameCanvasProps): JSX.Element => {
 
         // 開発モードでデバッグAPIを露出
         if (process.env.NODE_ENV === "development") {
-          // @ts-expect-error - window上にデバッグ用プロパティを設定
-          window.game = game
-          // @ts-expect-error - window上にデバッグ用プロパティを設定
-          window.__debug = game.getDebugAPI()
+          ;(window as any).game = game
+          ;(window as any).__debug = game.getDebugAPI()
 
           console.log("🎮 Factorio Clone - Development Mode")
           console.log("🔧 Debug API available at window.__debug")
@@ -74,12 +72,13 @@ export const GameCanvas = ({ onGameReady }: GameCanvasProps): JSX.Element => {
 
         setIsLoading(false)
 
-        // クリーンアップ関数を返す
-        return (): void => {
+        // クリーンアップ関数を返す（void にする）
+        const cleanup = (): void => {
           window.removeEventListener("resize", handleResize)
           game.stop()
           app.destroy()
         }
+        return cleanup
       } catch (err) {
         console.error("Failed to initialize game:", err)
         setError(err instanceof Error ? err.message : String(err))
@@ -87,11 +86,11 @@ export const GameCanvas = ({ onGameReady }: GameCanvasProps): JSX.Element => {
       }
     }
 
-    const cleanup = initializeGame()
+    initializeGame()
 
     // コンポーネントのアンマウント時にクリーンアップ
-    return (): void => {
-      cleanup?.then(cleanupFn => cleanupFn?.())
+    return () => {
+      // クリーンアップは initializeGame 内で処理
     }
   }, [onGameReady])
 

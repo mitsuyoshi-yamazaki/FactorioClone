@@ -41,7 +41,7 @@ type DebugActionResult = {
 export class Game {
   private readonly _app: Application
   private _initialized = false
-  private _gameLoop?: number
+  private _gameLoop?: number | undefined
 
   constructor(app: Application) {
     this._app = app
@@ -102,7 +102,7 @@ export class Game {
   /**
    * 更新処理
    */
-  private _update = (deltaTime: number): void => {
+  private _update = (_deltaTime: number): void => {
     // TODO: Systems の update 処理
     // TODO: StateManager の update 処理
   }

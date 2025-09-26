@@ -68,7 +68,7 @@ test.describe('基本機能', () => {
 
   test('リサイズが正常に動作すること', async ({ page }) => {
     // 初期サイズの取得
-    const initialSize = await page.viewportSize();
+    // const _initialSize = await page.viewportSize();
 
     // ウィンドウサイズを変更
     await page.setViewportSize({ width: 1024, height: 768 });

@@ -148,7 +148,7 @@ const mockWebGLContext = {
 
 // HTMLCanvasElement のモック拡張
 Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
-  value: jest.fn((contextType: string, options?: any) => {
+  value: jest.fn((contextType: string, _options?: any) => {
     switch (contextType) {
       case '2d':
         return mockCanvasContext;

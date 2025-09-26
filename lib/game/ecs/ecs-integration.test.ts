@@ -129,8 +129,10 @@ describe('ECS統合テスト', () => {
     // 位置が更新されていることを確認
     const updatedPosition = world.getComponent<PositionComponent>(player, 'Position')
     expect(updatedPosition).toBeDefined()
-    expect(updatedPosition!.x).toBeCloseTo(100 * (16.67 / 1000))
-    expect(updatedPosition!.y).toBeCloseTo(50 * (16.67 / 1000))
+    if (updatedPosition) {
+      expect(updatedPosition.x).toBeCloseTo(100 * (16.67 / 1000))
+      expect(updatedPosition.y).toBeCloseTo(50 * (16.67 / 1000))
+    }
 
     // レンダーシステムが更新された位置を取得していることを確認
     expect(renderSystem.renderedPositions.length).toBe(1)
